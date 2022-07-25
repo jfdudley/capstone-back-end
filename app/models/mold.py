@@ -7,54 +7,53 @@ class Mold(db.Model):
     num_wells = db.Column(db.Integer, nullable=False)
     source = db.Column(db.String, nullable=False)
 
-required_attributes = {
-    "well_shape" : True,
-    "well_volume" : True,
-    "num_wells" : True,
-    "source" : True
-}
+    required_attributes = {
+        "well_shape" : True,
+        "well_volume" : True,
+        "num_wells" : True,
+        "source" : True
+    }
 
-# Instance Methods
+    # Instance Methods
 
-def self_to_dict(self):
-    instance_dict = dict(
-        mold_id=self.mold_id,
-        well_shape=self.well_shape,
-        well_volume=self.well_volume,
-        num_wells=self.num_wells,
-    )
-    if self.source:
-        instance_dict["source"] = self.source
-    
-    return instance_dict
-
-def update_self(self, data_dict):
-    dict_key_errors = []
-    for key in data_dict.keys():
-        if hasattr(self, key):
-            setattr(self, key, data_dict[key])
-        else:
-            dict_key_errors.append(key)
-    if dict_key_errors:
-        raise ValueError(dict_key_errors)
-
-# Class methods
-
-@classmethod
-def return_class_name(cls):
-    return cls.__name__
-
-@classmethod
-def create_from_dict(cls, data_dict):
-    if data_dict.keys() == cls.required_attributes.keys():
-            return cls(
-                well_shape=data_dict["well_shape"],
-                well_volume=data_dict["well_volume"],
-                num_wells=data_dict["num_wells"],
-                source=data_dict["source"]
-            )
+    def self_to_dict(self):
+        instance_dict = dict(
+            well_shape=self.well_shape,
+            well_volume=self.well_volume,
+            num_wells=self.num_wells,
+        )
+        if self.source:
+            instance_dict["source"] = self.source
         
-    else:
-        remaining_keys= set(data_dict.keys())-set(cls.required_attributes.keys())
-        response=list(remaining_keys)
-        raise ValueError(response)
+        return instance_dict
+
+    def update_self(self, data_dict):
+        dict_key_errors = []
+        for key in data_dict.keys():
+            if hasattr(self, key):
+                setattr(self, key, data_dict[key])
+            else:
+                dict_key_errors.append(key)
+        if dict_key_errors:
+            raise ValueError(dict_key_errors)
+
+    # Class methods
+
+    @classmethod
+    def return_class_name(cls):
+        return cls.__name__
+
+    @classmethod
+    def create_from_dict(cls, data_dict):
+        if data_dict.keys() == cls.required_attributes.keys():
+                return cls(
+                    well_shape=data_dict["well_shape"],
+                    well_volume=data_dict["well_volume"],
+                    num_wells=data_dict["num_wells"],
+                    source=data_dict["source"]
+                )
+            
+        else:
+            remaining_keys= set(data_dict.keys())-set(cls.required_attributes.keys())
+            response=list(remaining_keys)
+            raise ValueError(response)
