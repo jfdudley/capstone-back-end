@@ -21,13 +21,12 @@ class Recipe(db.Model):
             use_location=self.location.location_name,
         )
         
-        # code below splits string into a list of string values on linebreak
+        # split string into a list of string values on linebreak
         instructions_list = self.recipe_instructions.splitlines()
-
         instance_dict["instructions"] = instructions_list
 
+        # get list of ingredients, ids, and percent used
         ingredient_info = [ingredient.self_to_dict("recipe") for ingredient in self.ingredients] if self.ingredients else []
-
         instance_dict["ingredient_info"] = ingredient_info
 
         return instance_dict
