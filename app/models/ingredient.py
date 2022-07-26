@@ -3,7 +3,7 @@ from app import db
 class Ingredient(db.Model):
     ingredient_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     ingredient_name = db.Column(db.String, nullable=False)
-    recipes = db.relationship("RecipeIngredients", back_populates="ingredients")
+    recipes = db.relationship("RecipeIngredients", back_populates="ingredient")
 
 
     required_attributes = {

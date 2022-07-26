@@ -33,8 +33,6 @@ def create_app(test_config=None):
     migrate.init_app(app, db)
 
     # Register Blueprints here
-    # from .routes import example_bp
-    # app.register_blueprint(example_bp)
     from .routes.recipe_routes import recipe_bp
     app.register_blueprint(recipe_bp)
 

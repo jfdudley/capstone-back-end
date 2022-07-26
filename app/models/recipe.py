@@ -9,7 +9,7 @@ class Recipe(db.Model):
     category = db.relationship("Category", back_populates='recipes')
     location_id = db.Column(db.Integer, db.ForeignKey('location.location_id'), nullable=False)
     location = db.relationship("Location", back_populates='recipes')
-    ingredients = db.relationship("RecipeIngredients", back_populates="recipes")
+    ingredients = db.relationship("RecipeIngredients", back_populates="recipe")
 
     # Instance Methods
 
@@ -20,18 +20,15 @@ class Recipe(db.Model):
             category=self.category.category_name,
             use_location=self.location.location_name,
         )
-        # instructions should be long string with line breaks before each next step
-        # ex: "1. Melt waxes, butters, and oils together over low heat\n2. When liquid, remove from heat and let cool slightly\n3....."
-        # code below splits string into a list of string values
+        
+        # code below splits string into a list of string values on linebreak
         instructions_list = self.recipe_instructions.splitlines()
 
         instance_dict["instructions"] = instructions_list
 
-        ingredient_info = [ingredient.self_to_dict() for ingredient in self.ingredients] if self.ingredients else []
+        ingredient_info = [ingredient.self_to_dict("recipe") for ingredient in self.ingredients] if self.ingredients else []
 
         instance_dict["ingredient_info"] = ingredient_info
-
-        # Need to add stuff here about getting ingredients and amounts - stored as nested dictionary?
 
         return instance_dict
 

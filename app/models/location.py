@@ -15,7 +15,7 @@ class Location(db.Model):
         instance_dict = dict(
             location_name=self.category_name,
         )
-        # instance_dict["recipes"] = [recipe.name for recipe in self.recipes] if self.recipes else []
+        instance_dict["recipes"] = [recipe.name for recipe in self.recipes] if self.recipes else []
         
         return instance_dict
 
