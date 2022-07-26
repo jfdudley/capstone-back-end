@@ -18,6 +18,9 @@ class Ingredient(db.Model):
             ingredient_id = self.ingredient_id,
             ingredient_name=self.ingredient_name
         )
+
+        recipe_info = [recipe.self_to_dict("ingredient") for recipe in self.recipes] if self.recipes else []
+        instance_dict["recipe_info"] = recipe_info
         
         return instance_dict
 
