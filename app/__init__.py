@@ -22,8 +22,12 @@ def create_app(test_config=None):
         app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
             "SQLALCHEMY_TEST_DATABASE_URI")
 
-    # Import models here for Alembic setup
-    # from app.models.ExampleModel import ExampleModel
+    from app.models.mold import Mold
+    from app.models.category import Category
+    from app.models.location import Location
+    from app.models.recipe import Recipe
+    from app.models.ingredient import Ingredient
+    from app.models.recipe_ingredients import RecipeIngredients
 
     db.init_app(app)
     migrate.init_app(app, db)
@@ -31,6 +35,8 @@ def create_app(test_config=None):
     # Register Blueprints here
     # from .routes import example_bp
     # app.register_blueprint(example_bp)
+    from .routes.recipe_routes import recipe_bp
+    app.register_blueprint(recipe_bp)
 
     CORS(app)
     return app

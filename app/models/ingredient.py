@@ -3,6 +3,8 @@ from app import db
 class Ingredient(db.Model):
     ingredient_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     ingredient_name = db.Column(db.String, nullable=False)
+    recipes = db.relationship("RecipeIngredients", back_populates="ingredients")
+
 
     required_attributes = {
         "ingredient_name" : True,
@@ -12,6 +14,7 @@ class Ingredient(db.Model):
 
     def self_to_dict(self):
         instance_dict = dict(
+            message="This is an Ingredient instance",
             ingredient_id = self.ingredient_id,
             ingredient_name=self.ingredient_name
         )
