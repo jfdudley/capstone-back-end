@@ -6,7 +6,7 @@ import requests
 def error_message(message, status_code):
     abort(make_response(jsonify(dict(details=message)), status_code))
 
-def success_message_info_as_list(message, status_code=200):
+def success_message_info(message, status_code=200):
     return make_response(jsonify(message), status_code)
 
 def return_database_info_array(return_value):
@@ -28,12 +28,24 @@ def get_record_by_id(cls, id):
     else:
         error_message(f"{cls.return_class_name()} id: {id} not found", 404)
 
-def get_record_by_name(cls, attribute_name, name):
-    record = cls.query.filter_by(attribute_name == name)
+def get_record_by_name(cls, name):
+    if cls.return_class_name() == "Recipe":
+        record = cls.query.filter_by(recipe_name = name).first()
+    elif cls.return_class_name() == "Ingredient":
+        record = cls.query.filter_by(ingredient_name = name).first()
+    elif cls.return_class_name() == "Category":
+        record = cls.query.filter_by(category_name = name).first()
+    elif cls.return_class_name() == "Location":
+        record = cls.query.filter_by(location_name = name).first()
+    elif cls.return_class_name() == "Mold":
+        record = cls.query.filter_by(mold_shape = name).first()
+    else:
+        record = None
+    
     if record:
         return record
     else:
-        error_message(f"{cls.return_class_name()} instance with {attribute_name} {name} not found", 404)
+        error_message(f"{cls.return_class_name()} instance with name {name} not found", 404)
 
 def create_record_safely(cls, data_dict):
     try:

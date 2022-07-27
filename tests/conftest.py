@@ -86,9 +86,9 @@ def one_recipe(app, three_categories, three_locations, nine_ingredients):
 @pytest.fixture
 def three_recipes(app, three_categories, three_locations, nine_ingredients):
     for i in range(3):
-        num = i
+        num = i + 1
         category = Category.query.get(num)
-        location = Location.query.get(1)
+        location = Location.query.get(num)
         recipe = Recipe(
             recipe_name=f"Basic Solid {category.category_name}", 
             recipe_description=f"A basic solid {category.category_name} recipe",
@@ -97,12 +97,12 @@ def three_recipes(app, three_categories, three_locations, nine_ingredients):
             location_id=location.location_id)
         db.session.add(recipe)
         
-        wax = Ingredient.query.get(1) # should be beeswax, rice bran wax, cetyl alcohol
-        butter = Ingredient.query.get((1 + 3)) # should be shea butter, cocoa butter, mango butter
-        oil = Ingredient.query.get((1 + 6)) # should be almond oil, jojoba oil, argan oil
+        wax = Ingredient.query.get(num) # should be beeswax, rice bran wax, cetyl alcohol
+        butter = Ingredient.query.get((num + 3)) # should be shea butter, cocoa butter, mango butter
+        oil = Ingredient.query.get((num + 6)) # should be almond oil, jojoba oil, argan oil
 
-        db.session.add(RecipeIngredients(recipe_id=1, ingredient_id=wax.ingredient_id, percentage=33))
-        db.session.add(RecipeIngredients(recipe_id=1, ingredient_id=butter.ingredient_id, percentage=33))
-        db.session.add(RecipeIngredients(recipe_id=1, ingredient_id=oil.ingredient_id, percentage=33))
+        db.session.add(RecipeIngredients(recipe_id=num, ingredient_id=wax.ingredient_id, percentage=33))
+        db.session.add(RecipeIngredients(recipe_id=num, ingredient_id=butter.ingredient_id, percentage=33))
+        db.session.add(RecipeIngredients(recipe_id=num, ingredient_id=oil.ingredient_id, percentage=33))
         db.session.commit()
 
