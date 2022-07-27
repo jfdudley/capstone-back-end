@@ -12,8 +12,3 @@ def get_all_recipes():
     recipe_response = [recipe.self_to_dict() for recipe in recipes]
     return success_message_info(recipe_response, status_code=200)
 
-@recipe_bp.route("/<name>", methods=["GET"])
-def testing_get_recipe_by_name(name):
-    recipe = get_record_by_name(Recipe, name)
-    recipe_dict = recipe.self_to_dict()
-    return success_message_info(recipe_dict, status_code=200) 
