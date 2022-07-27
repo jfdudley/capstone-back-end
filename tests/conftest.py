@@ -29,7 +29,7 @@ def client(app):
 
 @pytest.fixture
 def three_categories(app):
-    category_1 = Category(category_name="Moisturiser")
+    category_1 = Category(category_name="Moisturizer")
     category_2 = Category(category_name="Cleanser")
     category_3 = Category(category_name="Scrub")
 
@@ -46,21 +46,24 @@ def three_locations(app):
     db.session.commit()
 
 @pytest.fixture
-def six_ingredients(app):
-    ingredient_1 = Ingredient(ingredient_name="Beeswax")
-    ingredient_2 = Ingredient(ingredient_name="Rice Bran Wax")
-    ingredient_3 = Ingredient(ingredient_name="Shea Butter")
-    ingredient_4 = Ingredient(ingredient_name="Cocoa Butter")
-    ingredient_5 = Ingredient(ingredient_name="Almond Oil")
-    ingredient_6 = Ingredient(ingredient_name="Jojoba Oil")
+def nine_ingredients(app):
+    ingredients = [
+        Ingredient(ingredient_name="Beeswax"),
+        Ingredient(ingredient_name="Rice Bran Wax"),
+        Ingredient(ingredient_name="Cetyl Alcohol"),
+        Ingredient(ingredient_name="Shea Butter"),
+        Ingredient(ingredient_name="Cocoa Butter"),
+        Ingredient(ingredient_name="Mango Butter"),
+        Ingredient(ingredient_name="Almond Oil"),
+        Ingredient(ingredient_name="Jojoba Oil"),
+        Ingredient(ingredient_name="Argan Oil")
+    ]
 
-
-    db.session.add_all([ingredient_1, ingredient_2, ingredient_3, ingredient_4, ingredient_5, ingredient_6])
+    db.session.add_all(ingredients)
     db.session.commit()
 
 @pytest.fixture
-def one_recipe(app, three_categories, three_locations, six_ingredients):
-    #
+def one_recipe(app, three_categories, three_locations, nine_ingredients):
     category = Category.query.get(1)
     location = Location.query.get(1)
     recipe = Recipe(
@@ -72,12 +75,34 @@ def one_recipe(app, three_categories, three_locations, six_ingredients):
     db.session.add(recipe)
     
     wax = Ingredient.query.get(1) # should be beeswax
-    butter = Ingredient.query.get(3) # should be shea butter
-    oil = Ingredient.query.get(5) # should be almond oil
+    butter = Ingredient.query.get(4) # should be shea butter
+    oil = Ingredient.query.get(7) # should be almond oil
 
     db.session.add(RecipeIngredients(recipe_id=1, ingredient_id=wax.ingredient_id, percentage=33))
     db.session.add(RecipeIngredients(recipe_id=1, ingredient_id=butter.ingredient_id, percentage=33))
     db.session.add(RecipeIngredients(recipe_id=1, ingredient_id=oil.ingredient_id, percentage=33))
     db.session.commit()
 
+@pytest.fixture
+def three_recipes(app, three_categories, three_locations, nine_ingredients):
+    for i in range(3):
+        num = i
+        category = Category.query.get(num)
+        location = Location.query.get(1)
+        recipe = Recipe(
+            recipe_name=f"Basic Solid {category.category_name}", 
+            recipe_description=f"A basic solid {category.category_name} recipe",
+            recipe_instructions=f"1. Melt ingredients together\n2. Remove from heat and cool slightly\n3. Pour into mold and cool overnight until solid\n4. Now you have a solid {category.category_name}",
+            category_id=category.category_id,
+            location_id=location.location_id)
+        db.session.add(recipe)
+        
+        wax = Ingredient.query.get(1) # should be beeswax, rice bran wax, cetyl alcohol
+        butter = Ingredient.query.get((1 + 3)) # should be shea butter, cocoa butter, mango butter
+        oil = Ingredient.query.get((1 + 6)) # should be almond oil, jojoba oil, argan oil
+
+        db.session.add(RecipeIngredients(recipe_id=1, ingredient_id=wax.ingredient_id, percentage=33))
+        db.session.add(RecipeIngredients(recipe_id=1, ingredient_id=butter.ingredient_id, percentage=33))
+        db.session.add(RecipeIngredients(recipe_id=1, ingredient_id=oil.ingredient_id, percentage=33))
+        db.session.commit()
 
