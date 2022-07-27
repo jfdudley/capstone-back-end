@@ -124,3 +124,46 @@ def test_get_all_recipes_with_three_recipe(client, three_recipes):
                 "percentage": 33
             }]
 
+
+def test_get_one_recipe_by_id_returns_correct_recipe(client, three_recipes):
+    # Act
+    response = client.get("/recipes/2")
+    response_body = response.get_json()
+
+    # Assert
+    assert response.status_code == 200
+    assert response_body["recipe_id"] == 2
+    assert response_body["category"] == "Cleanser"
+    assert response_body["use_location"] == "Face"
+    assert response_body["recipe_name"] == "Basic Solid Cleanser"
+    assert response_body["recipe_description"] == "A basic solid Cleanser recipe"
+    assert response_body["instructions"] == [
+        "1. Melt ingredients together", 
+        "2. Remove from heat and cool slightly", 
+        "3. Pour into mold and cool overnight until solid", 
+        "4. Now you have a solid Cleanser"]
+    assert response_body["ingredient_info"] == [{
+                "ingredient_id": 2,
+                "ingredient_name": "Rice Bran Wax",
+                "percentage": 33
+            },
+            {
+                "ingredient_id": 5,
+                "ingredient_name": "Cocoa Butter",
+                "percentage": 33
+            },
+            {
+                "ingredient_id": 8,
+                "ingredient_name": "Jojoba Oil",
+                "percentage": 33
+            }]
+
+
+def test_get_one_recipe_invalid_id_returns_error(client, three_recipes):
+    #Act
+    response = client.get("/recipes/20")
+    response_body = response.get_json()
+
+    # Assert
+    assert response.status_code == 404
+    assert response_body == {"details" : "Recipe id: 20 not found."}

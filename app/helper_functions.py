@@ -9,9 +9,11 @@ def error_message(message, status_code):
 def success_message_info(message, status_code=200):
     return make_response(jsonify(message), status_code)
 
+# might not need this?
 def return_database_info_array(return_value):
     return make_response(jsonify(return_value))
 
+# might not need this either? I think this was specifically written to pass task list tests
 def return_database_info_dict(category, return_value):
     return_dict = {}
     return_dict[category] = return_value
@@ -26,7 +28,7 @@ def get_record_by_id(cls, id):
     if record:
         return record
     else:
-        error_message(f"{cls.return_class_name()} id: {id} not found", 404)
+        error_message(f"{cls.return_class_name()} id: {id} not found.", 404)
 
 def get_record_by_name(cls, name):
     if cls.return_class_name() == "Recipe":
@@ -45,7 +47,7 @@ def get_record_by_name(cls, name):
     if record:
         return record
     else:
-        error_message(f"{cls.return_class_name()} instance with name {name} not found", 404)
+        error_message(f"{cls.return_class_name()} instance with name {name} not found.", 404)
 
 def create_record_safely(cls, data_dict):
     try:

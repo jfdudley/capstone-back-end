@@ -15,6 +15,7 @@ class Recipe(db.Model):
 
     def self_to_dict(self):
         instance_dict = dict(
+            recipe_id=self.recipe_id,
             recipe_name=self.recipe_name,
             recipe_description=self.recipe_description,
             category=self.category.category_name,
