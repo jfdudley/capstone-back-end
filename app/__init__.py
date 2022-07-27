@@ -35,6 +35,8 @@ def create_app(test_config=None):
     # Register Blueprints here
     from .routes.recipe_routes import recipe_bp
     app.register_blueprint(recipe_bp)
+    from .routes.mold_routes import mold_bp
+    app.register_blueprint(mold_bp)
 
     CORS(app)
     return app

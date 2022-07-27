@@ -55,10 +55,19 @@ def create_record_safely(cls, data_dict):
 
 def update_record_safely(cls, record, data_dict):
     try:
-        record.update_self(data_dict)
+        update_self(record, data_dict)
     except ValueError as err:
         error_message(f"Invalid key(s): {err}. {cls.return_class_name()} not updated.", 400)
 
+def update_self(instance, data_dict):
+        dict_key_errors = []
+        for key in data_dict.keys():
+            if instance.hasattr(key):
+                instance.setattr(key, data_dict[key])
+            else:
+                dict_key_errors.append(key)
+        if dict_key_errors:
+            raise ValueError(dict_key_errors)
 
 
 

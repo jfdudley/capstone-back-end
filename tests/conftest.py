@@ -36,6 +36,8 @@ def three_categories(app):
     db.session.add_all([category_1, category_2, category_3])
     db.session.commit()
 
+    return [category_1, category_2, category_3]
+
 @pytest.fixture
 def three_locations(app):
     location_1 = Location(location_name="Body")
@@ -44,6 +46,8 @@ def three_locations(app):
 
     db.session.add_all([location_1, location_2, location_3])
     db.session.commit()
+
+    return [location_1, location_2, location_3]
 
 @pytest.fixture
 def nine_ingredients(app):
@@ -61,6 +65,8 @@ def nine_ingredients(app):
 
     db.session.add_all(ingredients)
     db.session.commit()
+
+    return ingredients
 
 @pytest.fixture
 def one_recipe(app, three_categories, three_locations, nine_ingredients):
@@ -83,12 +89,16 @@ def one_recipe(app, three_categories, three_locations, nine_ingredients):
     db.session.add(RecipeIngredients(recipe_id=1, ingredient_id=oil.ingredient_id, percentage=33))
     db.session.commit()
 
+    return recipe
+
 @pytest.fixture
 def three_recipes(app, three_categories, three_locations, nine_ingredients):
+    recipe_list = []
     for i in range(3):
-        num = i + 1
-        category = Category.query.get(num)
-        location = Location.query.get(num)
+        num = i
+        new_recipe_id = num + 1
+        category = three_categories[num]
+        location = three_locations[num]
         recipe = Recipe(
             recipe_name=f"Basic Solid {category.category_name}", 
             recipe_description=f"A basic solid {category.category_name} recipe",
@@ -97,12 +107,48 @@ def three_recipes(app, three_categories, three_locations, nine_ingredients):
             location_id=location.location_id)
         db.session.add(recipe)
         
-        wax = Ingredient.query.get(num) # should be beeswax, rice bran wax, cetyl alcohol
-        butter = Ingredient.query.get((num + 3)) # should be shea butter, cocoa butter, mango butter
-        oil = Ingredient.query.get((num + 6)) # should be almond oil, jojoba oil, argan oil
+        wax = nine_ingredients[num] # should be beeswax, rice bran wax, cetyl alcohol
+        butter = nine_ingredients[num + 3] # should be shea butter, cocoa butter, mango butter
+        oil = nine_ingredients[num + 6] # should be almond oil, jojoba oil, argan oil
 
-        db.session.add(RecipeIngredients(recipe_id=num, ingredient_id=wax.ingredient_id, percentage=33))
-        db.session.add(RecipeIngredients(recipe_id=num, ingredient_id=butter.ingredient_id, percentage=33))
-        db.session.add(RecipeIngredients(recipe_id=num, ingredient_id=oil.ingredient_id, percentage=33))
+        db.session.add(RecipeIngredients(recipe_id=new_recipe_id, ingredient_id=wax.ingredient_id, percentage=33))
+        db.session.add(RecipeIngredients(recipe_id=new_recipe_id, ingredient_id=butter.ingredient_id, percentage=33))
+        db.session.add(RecipeIngredients(recipe_id=new_recipe_id, ingredient_id=oil.ingredient_id, percentage=33))
         db.session.commit()
 
+        recipe_list.append(recipe)
+    
+    return recipe_list
+
+@pytest.fixture
+def one_mold(app):
+    test_mold = Mold(
+            well_shape="Flower",
+            well_volume_grams=30,
+            num_wells=12,
+            source="Brambleberry"
+        )
+    db.session.add(test_mold)
+    db.session.commit()
+    return test_mold
+
+@pytest.fixture
+def three_molds(app):
+    shapes = ["Circle", "Rectangle", "Oval"]
+    well_counts = [4, 10, 12]
+    volume = [30, 100, 75]
+    sources = ["Etsy", "Brambleberry", "Side of the road"]
+    new_molds = []
+    for i in range(3):
+        new_mold = Mold(
+            well_shape=shapes[i],
+            well_volume_grams=volume[i],
+            num_wells=well_counts[i],
+            source=sources[i]
+        )
+        db.session.add(new_mold)
+        new_molds.append(new_mold)
+        
+    db.session.commit()
+
+    return new_molds

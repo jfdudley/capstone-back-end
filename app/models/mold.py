@@ -3,13 +3,13 @@ from app import db
 class Mold(db.Model):
     mold_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     well_shape = db.Column(db.String, nullable=False)
-    well_volume = db.Column(db.Integer, nullable=False)
+    well_volume_grams = db.Column(db.Integer, nullable=False)
     num_wells = db.Column(db.Integer, nullable=False)
     source = db.Column(db.String, nullable=False)
 
     required_attributes = {
         "well_shape" : True,
-        "well_volume" : True,
+        "well_volume_grams" : True,
         "num_wells" : True,
         "source" : True
     }
@@ -18,12 +18,12 @@ class Mold(db.Model):
 
     def self_to_dict(self):
         instance_dict = dict(
+            mold_id=self.mold_id,
             well_shape=self.well_shape,
-            well_volume=self.well_volume,
+            well_volume_grams=self.well_volume_grams,
             num_wells=self.num_wells,
+            source=self.source
         )
-        if self.source:
-            instance_dict["source"] = self.source
         
         return instance_dict
 

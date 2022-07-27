@@ -38,6 +38,7 @@ def test_get_all_recipes_with_one_recipe(client, one_recipe):
                 "percentage": 33
             }]
 
+
 def test_get_all_recipes_with_three_recipe(client, three_recipes):
     #Act
     response = client.get("/recipes")
