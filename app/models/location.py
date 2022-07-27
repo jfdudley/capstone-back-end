@@ -11,11 +11,12 @@ class Location(db.Model):
 
     # Instance Methods
 
-    def self_to_dict(self):
+    def self_to_dict(self, show_recipes):
         instance_dict = dict(
             location_name=self.category_name,
         )
-        instance_dict["recipes"] = [recipe.name for recipe in self.recipes] if self.recipes else []
+        if show_recipes:
+            instance_dict["recipes"] = [recipe.name for recipe in self.recipes] if self.recipes else []
         
         return instance_dict
 

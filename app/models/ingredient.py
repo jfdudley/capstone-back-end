@@ -12,15 +12,15 @@ class Ingredient(db.Model):
 
     # Instance Methods
 
-    def self_to_dict(self):
+    def self_to_dict(self, show_recipes=False):
         instance_dict = dict(
             message="This is an Ingredient instance",
             ingredient_id = self.ingredient_id,
             ingredient_name=self.ingredient_name
         )
-
-        recipe_info = [recipe.self_to_dict("ingredient") for recipe in self.recipes] if self.recipes else []
-        instance_dict["recipe_info"] = recipe_info
+        if show_recipes:
+            recipe_info = [recipe.self_to_dict("ingredient") for recipe in self.recipes] if self.recipes else []
+            instance_dict["recipe_info"] = recipe_info
         
         return instance_dict
 
