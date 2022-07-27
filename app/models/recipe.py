@@ -19,7 +19,7 @@ class Recipe(db.Model):
             recipe_name=self.recipe_name,
             recipe_description=self.recipe_description,
             category=self.category.category_name,
-            use_location=self.location.location_name,
+            location=self.location.location_name,
         )
         
         # split string into a list of string values on linebreak

@@ -18,7 +18,7 @@ def test_get_all_recipes_with_one_recipe(client, one_recipe):
     #Assert
     assert response.status_code == 200
     assert response_body[0]["category"] == "Moisturizer"
-    assert response_body[0]["use_location"] == "Body"
+    assert response_body[0]["location"] == "Body"
     assert response_body[0]["recipe_name"] == "Basic Solid Lotion"
     assert response_body[0]["recipe_description"] == "A basic solid lotion recipe"
     assert response_body[0]["instructions"] == ["1. Melt wax, butter, and oil together", "2. Remove from heat and cool slightly", "3. Pour into mold and cool overnight until solid"]
@@ -49,7 +49,7 @@ def test_get_all_recipes_with_three_recipe(client, three_recipes):
 
     # recipe 1
     assert response_body[0]["category"] == "Moisturizer"
-    assert response_body[0]["use_location"] == "Body"
+    assert response_body[0]["location"] == "Body"
     assert response_body[0]["recipe_name"] == "Basic Solid Moisturizer"
     assert response_body[0]["recipe_description"] == "A basic solid Moisturizer recipe"
     assert response_body[0]["instructions"] == [
@@ -75,7 +75,7 @@ def test_get_all_recipes_with_three_recipe(client, three_recipes):
             }]
     # recipe 2
     assert response_body[1]["category"] == "Cleanser"
-    assert response_body[1]["use_location"] == "Face"
+    assert response_body[1]["location"] == "Face"
     assert response_body[1]["recipe_name"] == "Basic Solid Cleanser"
     assert response_body[1]["recipe_description"] == "A basic solid Cleanser recipe"
     assert response_body[1]["instructions"] == [
@@ -100,7 +100,7 @@ def test_get_all_recipes_with_three_recipe(client, three_recipes):
             }]
     # recipe 3
     assert response_body[2]["category"] == "Scrub"
-    assert response_body[2]["use_location"] == "Lips"
+    assert response_body[2]["location"] == "Lips"
     assert response_body[2]["recipe_name"] == "Basic Solid Scrub"
     assert response_body[2]["recipe_description"] == "A basic solid Scrub recipe"
     assert response_body[2]["instructions"] == [
@@ -134,7 +134,7 @@ def test_get_one_recipe_by_id_returns_correct_recipe(client, three_recipes):
     assert response.status_code == 200
     assert response_body["recipe_id"] == 2
     assert response_body["category"] == "Cleanser"
-    assert response_body["use_location"] == "Face"
+    assert response_body["location"] == "Face"
     assert response_body["recipe_name"] == "Basic Solid Cleanser"
     assert response_body["recipe_description"] == "A basic solid Cleanser recipe"
     assert response_body["instructions"] == [

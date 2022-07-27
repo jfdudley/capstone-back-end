@@ -2,6 +2,8 @@
 from flask import jsonify, abort, make_response
 import os
 import requests
+from app import db
+
 
 def error_message(message, status_code):
     abort(make_response(jsonify(dict(details=message)), status_code))
@@ -43,11 +45,11 @@ def get_record_by_name(cls, name):
         record = cls.query.filter_by(mold_shape = name).first()
     else:
         record = None
-    
-    if record:
-        return record
-    else:
-        error_message(f"{cls.return_class_name()} instance with name {name} not found.", 404)
+    return record
+    # if record:
+    #     return record
+    # else:
+    #     error_message(f"{cls.return_class_name()} instance with name {name} not found.", 404)
 
 def create_record_safely(cls, data_dict):
     try:
@@ -70,6 +72,14 @@ def update_self(instance, data_dict):
                 dict_key_errors.append(key)
         if dict_key_errors:
             raise ValueError(dict_key_errors)
+
+def get_or_create_record_by_name(cls, new_value, cls_attribute):
+    instance = get_record_by_name(cls, new_value)
+    if not instance:
+        instance = create_record_safely(cls, {cls_attribute : new_value})
+        db.session.add(instance)
+        db.session.commit()
+    return instance
 
 
 
