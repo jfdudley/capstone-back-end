@@ -167,3 +167,92 @@ def test_get_one_recipe_invalid_id_returns_error(client, three_recipes):
     # Assert
     assert response.status_code == 404
     assert response_body == {"details" : "Recipe id: 20 not found."}
+
+def test_add_new_recipe_existing_data_only_success(client, one_recipe):
+    # Arrange
+    new_recipe = {
+            "name" : "New Solid Lotion",
+            "description" : "Another lotion recipe",
+            "category" : "Moisturizer",
+            "location" : "Body",
+            "ingredients": {
+                "Beeswax" : 33,
+                "Shea Butter" : 33,
+                "Almond Oil" : 33,
+            },
+            "instructions" : "1. Instructions go here\n2. Some more down here"
+    }
+
+    # Act
+    response = client.post("/recipes", json=new_recipe)
+    response_body = response.get_json()
+    all_recipes = client.get("/recipes")
+    all_recipes_response = all_recipes.get_json()
+    ###
+    # Do get all requests to category, location, and ingredient routes
+
+
+    # Assert
+    assert response.status_code == 201
+    assert len(all_recipes_response) == 2
+    assert response_body["category"] == "Moisturizer"
+    assert response_body["location"] == "Body"
+    assert response_body["recipe_name"] == "New Solid Lotion"
+    assert response_body["recipe_description"] == "Another lotion recipe"
+    assert response_body["instructions"] == ["1. Instructions go here", "2. Some more down here"]
+    assert all_recipes_response[0] != all_recipes_response[1]
+    assert all_recipes_response[0]["category"] == all_recipes_response[1]["category"]
+    assert all_recipes_response[0]["location"] == all_recipes_response[1]["location"]
+    assert sorted(all_recipes_response[0]["ingredient_info"], key=lambda x: x["ingredient_name"]) == sorted(all_recipes_response[1]["ingredient_info"], key=lambda x: x["ingredient_name"])
+    assert all_recipes_response[0]["recipe_name"] != all_recipes_response[1]["recipe_name"]
+    assert all_recipes_response[0]["recipe_description"] != all_recipes_response[1]["recipe_description"]
+    assert all_recipes_response[0]["instructions"] != all_recipes_response[1]["instructions"]
+    ###
+    # check that length of responses for get all category, location, and ingredient routes are still 1, 1, and 3
+
+
+def test_add_new_recipe_existing_data_only_success(client, one_recipe):
+    # Arrange
+    new_recipe = {
+            "name" : "New Solid Lotion",
+            "description" : "Another lotion recipe",
+            "category" : "New Category",
+            "location" : "New Location",
+            "ingredients": {
+                "New wax" : 33,
+                "New Butter" : 33,
+                "New Oil" : 33,
+            },
+            "instructions" : "1. Instructions go here\n2. Some more down here"
+    }
+
+    # Act
+    response = client.post("/recipes", json=new_recipe)
+    response_body = response.get_json()
+    all_recipes = client.get("/recipes")
+    all_recipes_response = all_recipes.get_json()
+    ###
+    # Do get all requests to category, location, and ingredient routes
+
+    # Assert
+    assert response.status_code == 201
+    assert len(all_recipes_response) == 2
+    assert response_body["category"] == "New Category"
+    assert response_body["location"] == "New Location"
+    assert response_body["recipe_name"] == "New Solid Lotion"
+    assert response_body["recipe_description"] == "Another lotion recipe"
+    assert response_body["instructions"] == ["1. Instructions go here", "2. Some more down here"]
+    assert all_recipes_response[0] != all_recipes_response[1]
+    assert all_recipes_response[0]["category"] != all_recipes_response[1]["category"]
+    assert all_recipes_response[0]["location"] != all_recipes_response[1]["location"]
+    assert all_recipes_response[0]["recipe_name"] != all_recipes_response[1]["recipe_name"]
+    assert all_recipes_response[0]["recipe_description"] != all_recipes_response[1]["recipe_description"]
+    assert all_recipes_response[0]["instructions"] != all_recipes_response[1]["instructions"]
+    ###
+    # check that length of responses for get all category, location, and ingredient routes have increased
+
+
+
+
+
+

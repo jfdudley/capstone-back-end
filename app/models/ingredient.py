@@ -14,7 +14,6 @@ class Ingredient(db.Model):
 
     def self_to_dict(self, show_recipes=False):
         instance_dict = dict(
-            message="This is an Ingredient instance",
             ingredient_id = self.ingredient_id,
             ingredient_name=self.ingredient_name
         )
