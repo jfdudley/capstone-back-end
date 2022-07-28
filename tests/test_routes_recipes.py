@@ -221,7 +221,7 @@ def test_add_new_recipe_existing_data_only_success(client, one_recipe):
             "ingredient_info": {
                 "New wax" : 33,
                 "New Butter" : 33,
-                "New Oil" : 33,
+                "New Oil" : 33
             },
             "recipe_instructions" : "1. Instructions go here\n2. Some more down here"
     }
@@ -252,7 +252,55 @@ def test_add_new_recipe_existing_data_only_success(client, one_recipe):
     # check that length of responses for get all category, location, and ingredient routes have increased
 
 
+def test_patch_one_recipe_by_id_returns_updated_recipe(client, three_recipes):
+    # Arrange
+    response = client.get("/recipes/2")
+    edited_recipe_before = response.get_json()
 
+    unchanged_recipe = client.get("/recipes/1")
+    unchanged_recipe_before = unchanged_recipe.get_json()
 
+    new_recipe_info = {
+            "recipe_name" : "New Lotion Name",
+            "recipe_description" : "New Lotion Description",
+            "category" : "New Category",
+            "location" : "New Location",
+            "ingredient_info": {
+                "New wax" : 33,
+                "New Butter" : 33,
+                "New Oil" : 33,
+                "Rice Bran Wax" : 0,
+                "Cocoa Butter" : 0,
+                "Jojoba Oil" : 0,
+            },
+            "recipe_instructions" : "1. Instructions go here\n2. Some more down here"
+    }
 
+    # Act
+    patch_response = client.patch("/recipes/2", json=new_recipe_info)
+    edited_recipe_after = patch_response.get_json()
 
+    unchanged_recipe = client.get("/recipes/1")
+    unchanged_recipe_after = unchanged_recipe.get_json()
+
+    # Assert
+    assert response.status_code == 200
+    assert edited_recipe_before["recipe_id"] == 2
+    assert edited_recipe_before["category"] != edited_recipe_after["category"]
+    assert edited_recipe_before["location"] != edited_recipe_after["location"]
+    assert edited_recipe_before["recipe_name"] != edited_recipe_after["recipe_name"]
+    assert edited_recipe_before["recipe_description"] != edited_recipe_after["recipe_description"]
+    assert edited_recipe_before["instructions"] != edited_recipe_after["instructions"]
+    assert edited_recipe_before["ingredient_info"] != edited_recipe_after["ingredient_info"]
+
+    assert edited_recipe_after["recipe_id"] == 2
+    assert edited_recipe_after["category"] == "New Category"
+    assert edited_recipe_after["location"] == "New Location"
+    assert edited_recipe_after["recipe_name"] == "New Lotion Name"
+    assert edited_recipe_after["recipe_description"] == "New Lotion Description"
+    assert edited_recipe_after["instructions"] == ["1. Instructions go here", "2. Some more down here"]
+
+    assert unchanged_recipe_before == unchanged_recipe_after
+    ###
+    # check that length of responses for get all category, location, and ingredient routes have increased
+    # find a way to test that deleted ingredients are no longer in ingredients list

@@ -73,7 +73,7 @@ def update_recipe_by_id(recipe_id):
 
     for key in update_data.keys():
         if key in recipe_model_attributes:
-            recipe.setattr(key, update_data[key])
+            setattr(recipe, key, update_data[key])
         elif key == 'category':
             instance = get_or_create_record_by_name(Category, update_data[key], 'category_name')
             setattr(recipe, "category_id", instance.category_id)
