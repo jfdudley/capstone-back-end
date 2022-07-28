@@ -162,12 +162,13 @@ def test_get_one_recipe_by_id_returns_correct_recipe(client, three_recipes):
 
 def test_get_one_recipe_invalid_id_returns_error(client, three_recipes):
     #Act
-    response = client.get("/recipes/20")
+    response = client.get("/recipes/42")
     response_body = response.get_json()
 
     # Assert
     assert response.status_code == 404
-    assert response_body == {"details" : "Recipe id: 20 not found."}
+    assert response_body == {"details" : "Recipe id: 42 not found."}
+
 
 def test_add_new_recipe_existing_data_only_success(client, one_recipe):
     # Arrange
@@ -183,15 +184,30 @@ def test_add_new_recipe_existing_data_only_success(client, one_recipe):
             },
             "recipe_instructions" : "1. Instructions go here\n2. Some more down here"
     }
+    ingredient_call_before = client.get("/ingredients")
+    ingredient_info_before = ingredient_call_before.get_json()
+
+    category_call_before = client.get("/categories")
+    category_info_before = category_call_before.get_json()
+
+    location_call_before = client.get("/locations")
+    location_info_before = location_call_before.get_json()
 
     # Act
     response = client.post("/recipes", json=new_recipe)
     response_body = response.get_json()
+
     all_recipes = client.get("/recipes")
     all_recipes_response = all_recipes.get_json()
-    ###
-    # Do get all requests to category, location, and ingredient routes
 
+    ingredient_call_after = client.get("/ingredients")
+    ingredient_info_after = ingredient_call_after.get_json()
+
+    category_call_after = client.get("/categories")
+    category_info_after = category_call_after.get_json()
+
+    location_call_after = client.get("/locations")
+    location_info_after = location_call_after.get_json()
 
     # Assert
     assert response.status_code == 201
@@ -208,11 +224,11 @@ def test_add_new_recipe_existing_data_only_success(client, one_recipe):
     assert all_recipes_response[0]["recipe_name"] != all_recipes_response[1]["recipe_name"]
     assert all_recipes_response[0]["recipe_description"] != all_recipes_response[1]["recipe_description"]
     assert all_recipes_response[0]["instructions"] != all_recipes_response[1]["instructions"]
-    ###
-    # check that length of responses for get all category, location, and ingredient routes are still 1, 1, and 3
+    assert ingredient_info_after == ingredient_info_before
+    assert category_info_after == category_info_before
+    assert location_info_after == location_info_before
 
-
-def test_add_new_recipe_existing_data_only_success(client, one_recipe):
+def test_add_new_recipe_new_data_only_success(client, one_recipe):
     # Arrange
     new_recipe = {
             "recipe_name" : "New Solid Lotion",
@@ -226,31 +242,54 @@ def test_add_new_recipe_existing_data_only_success(client, one_recipe):
             },
             "recipe_instructions" : "1. Instructions go here\n2. Some more down here"
     }
+    ingredient_call_before = client.get("/ingredients")
+    ingredient_info_before = ingredient_call_before.get_json()
+
+    category_call_before = client.get("/categories")
+    category_info_before = category_call_before.get_json()
+
+    location_call_before = client.get("/locations")
+    location_info_before = location_call_before.get_json()
 
     # Act
     response = client.post("/recipes", json=new_recipe)
     response_body = response.get_json()
+
     all_recipes = client.get("/recipes")
     all_recipes_response = all_recipes.get_json()
-    ###
-    # Do get all requests to category, location, and ingredient routes
+
+    ingredient_call_after = client.get("/ingredients")
+    ingredient_info_after = ingredient_call_after.get_json()
+
+    category_call_after = client.get("/categories")
+    category_info_after = category_call_after.get_json()
+
+    location_call_after = client.get("/locations")
+    location_info_after = location_call_after.get_json()
 
     # Assert
     assert response.status_code == 201
     assert len(all_recipes_response) == 2
+
     assert response_body["category"] == "New Category"
     assert response_body["location"] == "New Location"
     assert response_body["recipe_name"] == "New Solid Lotion"
     assert response_body["recipe_description"] == "Another lotion recipe"
     assert response_body["instructions"] == ["1. Instructions go here", "2. Some more down here"]
+
     assert all_recipes_response[0] != all_recipes_response[1]
     assert all_recipes_response[0]["category"] != all_recipes_response[1]["category"]
     assert all_recipes_response[0]["location"] != all_recipes_response[1]["location"]
     assert all_recipes_response[0]["recipe_name"] != all_recipes_response[1]["recipe_name"]
     assert all_recipes_response[0]["recipe_description"] != all_recipes_response[1]["recipe_description"]
     assert all_recipes_response[0]["instructions"] != all_recipes_response[1]["instructions"]
-    ###
-    # check that length of responses for get all category, location, and ingredient routes have increased
+
+    assert len(ingredient_info_after) > len(ingredient_info_before)
+    assert len(category_info_after) > len(category_info_before)
+    assert len(location_info_after) > len(location_info_before)
+    assert len(ingredient_info_after) == 12
+    assert len(category_info_after) == 4
+    assert len(location_info_after) == 4
 
 
 def test_patch_one_recipe_by_id_returns_updated_recipe(client, three_recipes):
@@ -260,6 +299,15 @@ def test_patch_one_recipe_by_id_returns_updated_recipe(client, three_recipes):
 
     unchanged_recipe = client.get("/recipes/1")
     unchanged_recipe_before = unchanged_recipe.get_json()
+
+    ingredient_call_before = client.get("/ingredients")
+    ingredient_info_before = ingredient_call_before.get_json()
+
+    category_call_before = client.get("/categories")
+    category_info_before = category_call_before.get_json()
+
+    location_call_before = client.get("/locations")
+    location_info_before = location_call_before.get_json()
 
     new_recipe_info = {
             "recipe_name" : "New Lotion Name",
@@ -284,6 +332,15 @@ def test_patch_one_recipe_by_id_returns_updated_recipe(client, three_recipes):
     unchanged_recipe = client.get("/recipes/1")
     unchanged_recipe_after = unchanged_recipe.get_json()
 
+    ingredient_call_after = client.get("/ingredients")
+    ingredient_info_after = ingredient_call_after.get_json()
+
+    category_call_after = client.get("/categories")
+    category_info_after = category_call_after.get_json()
+
+    location_call_after = client.get("/locations")
+    location_info_after = location_call_after.get_json()
+
     # Assert
     assert response.status_code == 200
     assert edited_recipe_before["recipe_id"] == 2
@@ -292,7 +349,6 @@ def test_patch_one_recipe_by_id_returns_updated_recipe(client, three_recipes):
     assert edited_recipe_before["recipe_name"] != edited_recipe_after["recipe_name"]
     assert edited_recipe_before["recipe_description"] != edited_recipe_after["recipe_description"]
     assert edited_recipe_before["instructions"] != edited_recipe_after["instructions"]
-    assert edited_recipe_before["ingredient_info"] != edited_recipe_after["ingredient_info"]
 
     assert edited_recipe_after["recipe_id"] == 2
     assert edited_recipe_after["category"] == "New Category"
@@ -302,9 +358,23 @@ def test_patch_one_recipe_by_id_returns_updated_recipe(client, three_recipes):
     assert edited_recipe_after["instructions"] == ["1. Instructions go here", "2. Some more down here"]
 
     assert unchanged_recipe_before == unchanged_recipe_after
-    ###
-    # check that length of responses for get all category, location, and ingredient routes have increased
-    # find a way to test that deleted ingredients are no longer in ingredients list
+    assert len(ingredient_info_after) > len(ingredient_info_before)
+    assert len(category_info_after) > len(category_info_before)
+    assert len(location_info_after) > len(location_info_before)
+    assert len(ingredient_info_after) == 12
+    assert len(category_info_after) == 4
+    assert len(location_info_after) == 4
+
+    ingredient_list_before = [ingredient_info["ingredient_name"] for ingredient_info in edited_recipe_before["ingredient_info"]]
+    ingredient_list_after = [ingredient_info["ingredient_name"] for ingredient_info in edited_recipe_after["ingredient_info"]]
+    assert len(ingredient_list_before) == len(ingredient_list_after)
+    assert "Rice Bran Wax" not in ingredient_list_after
+    assert "Cocoa Butter" not in ingredient_list_after
+    assert "Jojoba Oil" not in ingredient_list_after
+    assert "New wax" in ingredient_list_after
+    assert "New Butter" in ingredient_list_after
+    assert "New Oil" in ingredient_list_after
+
 
 
 def test_delete_recipe_deletes_one_recipe(client, three_recipes):
