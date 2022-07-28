@@ -1,7 +1,7 @@
 import pytest
 from app.models.ingredient import Ingredient
 
-def test_get_all_ingredients_no_recipe_returns_empty_list(client):
+def test_get_all_ingredients_no_info_returns_empty_list(client):
     #Act
     response = client.get("/ingredients")
     response_body = response.get_json()
@@ -64,6 +64,7 @@ def test_get_one_ingredient_returns_correct_info_with_recipes(client, three_reci
             "recipe_name" : "Basic Solid Moisturizer",
             "percentage" : 33}]
         }
+
 
 def test_get_one_ingredient_returns_error_with_invalid_info(client, nine_ingredients):
     #Act

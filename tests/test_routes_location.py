@@ -1,7 +1,7 @@
 import pytest
 from app.models.location import Location
 
-def test_get_all_locations_no_recipe_returns_empty_list(client):
+def test_get_all_locations_no_info_returns_empty_list(client):
     #Act
     response = client.get("/locations")
     response_body = response.get_json()
@@ -11,7 +11,7 @@ def test_get_all_locations_no_recipe_returns_empty_list(client):
     assert response_body == []
 
 
-def test_get_all_locations_returns_list(client, three_locations):
+def test_get_all_locations_returns_all_locations(client, three_locations):
     #Act
     response = client.get("/locations")
     response_body = response.get_json()

@@ -1,7 +1,7 @@
 import pytest
 from app.models.recipe import Recipe
 
-def test_get_all_recipies_no_recipe_returns_empty_list(client):
+def test_get_all_recipes_no_info_returns_empty_list(client):
     #Act
     response = client.get("/recipes")
     response_body = response.get_json()
@@ -168,7 +168,7 @@ def test_get_one_recipe_invalid_id_returns_error(client, three_recipes):
     # Assert
     assert response.status_code == 404
     assert response_body == {"details" : "Recipe id: 42 not found."}
-
+    
 
 def test_add_new_recipe_existing_data_only_success(client, one_recipe):
     # Arrange
@@ -227,6 +227,7 @@ def test_add_new_recipe_existing_data_only_success(client, one_recipe):
     assert ingredient_info_after == ingredient_info_before
     assert category_info_after == category_info_before
     assert location_info_after == location_info_before
+
 
 def test_add_new_recipe_new_data_only_success(client, one_recipe):
     # Arrange
@@ -375,6 +376,28 @@ def test_patch_one_recipe_by_id_returns_updated_recipe(client, three_recipes):
     assert "New Butter" in ingredient_list_after
     assert "New Oil" in ingredient_list_after
 
+
+def test_patch_one_recipe_by_id_invalid_info_makes_no_changes(client, three_recipes):
+    # Arrange
+    pre_patch_recipe_response = client.get("/recipes/2")
+    edited_recipe_before = pre_patch_recipe_response.get_json()
+
+    new_recipe_info = { 
+        "name" : "New Recipe Name",
+        "info" : "New info here"
+        }
+
+    # Act
+    recipe_patch_response = client.patch("/recipes/2", json=new_recipe_info)
+    patch_response_body = recipe_patch_response.get_json()
+
+    post_patch_recipe_response = client.get("/recipes/2")
+    edited_recipe_after = post_patch_recipe_response.get_json()
+
+    # Assert
+    assert recipe_patch_response.status_code == 200
+    assert patch_response_body == edited_recipe_before
+    assert edited_recipe_before == edited_recipe_after
 
 
 def test_delete_recipe_deletes_one_recipe(client, three_recipes):
