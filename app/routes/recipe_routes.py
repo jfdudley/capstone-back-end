@@ -88,3 +88,15 @@ def update_recipe_by_id(recipe_id):
     return success_message_info(recipe.self_to_dict(), status_code=200)
 
 
+# Delete existing recipe by id
+@recipe_bp.route("/<recipe_id>", methods=["DELETE"])
+def delete_recipe_by_id(recipe_id):
+    recipe = get_record_by_id(Recipe, recipe_id)
+
+    for relation_instance in recipe.ingredients:
+        db.session.delete(relation_instance)
+    
+    db.session.delete(recipe)
+    db.session.commit()
+
+    return success_message_info(f'Recipe {recipe.recipe_id} "{recipe.recipe_name}" successfully deleted', 200)

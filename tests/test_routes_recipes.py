@@ -1,4 +1,5 @@
 import pytest
+from app.models.recipe import Recipe
 
 def test_get_all_recipies_no_recipe_returns_empty_list(client):
     #Act
@@ -304,3 +305,26 @@ def test_patch_one_recipe_by_id_returns_updated_recipe(client, three_recipes):
     ###
     # check that length of responses for get all category, location, and ingredient routes have increased
     # find a way to test that deleted ingredients are no longer in ingredients list
+
+
+def test_delete_recipe_deletes_one_recipe(client, three_recipes):
+    # Arrange
+    before_response = client.get("/recipes")
+    recipe_info_before = before_response.get_json()
+
+    # Act
+    delete_response = client.delete("/recipes/2")
+    delete_response_body = delete_response.get_json()
+
+    after_response = client.get("/recipes")
+    recipe_info_after = after_response.get_json()
+
+    # Assert
+    assert delete_response.status_code == 200
+    assert delete_response_body == 'Recipe 2 "Basic Solid Cleanser" successfully deleted'
+    assert len(recipe_info_before) == 3
+    assert len(recipe_info_after) == 2
+
+    assert Recipe.query.get(2) is None
+    assert Recipe.query.get(1) is not None
+    assert Recipe.query.get(3) is not None
