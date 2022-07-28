@@ -32,11 +32,16 @@ def create_app(test_config=None):
     db.init_app(app)
     migrate.init_app(app, db)
 
-    # Register Blueprints here
     from .routes.recipe_routes import recipe_bp
     app.register_blueprint(recipe_bp)
     from .routes.mold_routes import mold_bp
     app.register_blueprint(mold_bp)
+    from .routes.category_routes import category_bp
+    app.register_blueprint(category_bp)
+    from .routes.location_routes import location_bp
+    app.register_blueprint(location_bp)
+    from .routes.ingredient_routes import ingredient_bp
+    app.register_blueprint(ingredient_bp)
 
     CORS(app)
     return app
