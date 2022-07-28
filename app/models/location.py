@@ -5,10 +5,6 @@ class Location(db.Model):
     location_name = db.Column(db.String, nullable=False)
     recipes = db.relationship("Recipe", back_populates="location")
 
-    required_attributes = {
-        "location_name" : True,
-    }
-
     # Instance Methods
 
     def self_to_dict(self, show_recipes=False):
@@ -21,15 +17,6 @@ class Location(db.Model):
         
         return instance_dict
 
-    def update_self(self, data_dict):
-        dict_key_errors = []
-        for key in data_dict.keys():
-            if hasattr(self, key):
-                setattr(self, key, data_dict[key])
-            else:
-                dict_key_errors.append(key)
-        if dict_key_errors:
-            raise ValueError(dict_key_errors)
 
     # Class methods
 
@@ -39,12 +26,4 @@ class Location(db.Model):
 
     @classmethod
     def create_from_dict(cls, data_dict):
-        if data_dict.keys() == cls.required_attributes.keys():
-                return cls(
-                    location_name=data_dict["location_name"],
-                )
-            
-        else:
-            remaining_keys= set(data_dict.keys())-set(cls.required_attributes.keys())
-            response=list(remaining_keys)
-            raise ValueError(response)
+        return cls(location_name=data_dict["location_name"])

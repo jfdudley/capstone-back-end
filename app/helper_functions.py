@@ -11,15 +11,15 @@ def error_message(message, status_code):
 def success_message_info(message, status_code=200):
     return make_response(jsonify(message), status_code)
 
-# might not need this?
-def return_database_info_array(return_value):
-    return make_response(jsonify(return_value))
+# # might not need this?
+# def return_database_info_array(return_value):
+#     return make_response(jsonify(return_value))
 
-# might not need this either? I think this was specifically written to pass task list tests
-def return_database_info_dict(category, return_value):
-    return_dict = {}
-    return_dict[category] = return_value
-    return make_response(jsonify(return_dict))
+# # might not need this either? I think this was specifically written to pass task list tests
+# def return_database_info_dict(category, return_value):
+#     return_dict = {}
+#     return_dict[category] = return_value
+#     return make_response(jsonify(return_dict))
 
 def get_record_by_id(cls, id):
     try:
@@ -46,22 +46,18 @@ def get_record_by_name(cls, name):
     else:
         record = None
     return record
-    # if record:
-    #     return record
-    # else:
-    #     error_message(f"{cls.return_class_name()} instance with name {name} not found.", 404)
 
 def create_record_safely(cls, data_dict):
-    try:
-        return cls.create_from_dict(data_dict)
-    except ValueError as err:
-        error_message(f"Invalid key(s): {err}.  {cls.return_class_name()} not added to {cls.return_class_name()} List.", 400)
+    return cls.create_from_dict(data_dict)
 
 def update_record_safely(cls, record, data_dict):
     try:
         update_self(record, data_dict)
     except ValueError as err:
         error_message(f"Invalid key(s): {err}. {cls.return_class_name()} not updated.", 400)
+    # updating record is maintaining error handling where create record is not
+    # because create record will be handled by forms on the front end and so data_dict keys will always be correct
+    # updating a record may remain accessible via postman only and so should protect against human error
 
 def update_self(instance, data_dict):
         dict_key_errors = []
