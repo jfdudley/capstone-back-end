@@ -27,6 +27,7 @@ def app():
 def client(app):
     return app.test_client()
 
+
 @pytest.fixture
 def three_categories(app):
     category_1 = Category(category_name="Moisturizer")
@@ -38,6 +39,7 @@ def three_categories(app):
 
     return [category_1, category_2, category_3]
 
+
 @pytest.fixture
 def three_locations(app):
     location_1 = Location(location_name="Body")
@@ -48,6 +50,7 @@ def three_locations(app):
     db.session.commit()
 
     return [location_1, location_2, location_3]
+
 
 @pytest.fixture
 def nine_ingredients(app):
@@ -67,6 +70,7 @@ def nine_ingredients(app):
     db.session.commit()
 
     return ingredients
+
 
 @pytest.fixture
 def one_recipe(app, three_categories, three_locations, nine_ingredients):
@@ -90,6 +94,7 @@ def one_recipe(app, three_categories, three_locations, nine_ingredients):
     db.session.commit()
 
     return recipe
+
 
 @pytest.fixture
 def three_recipes(app, three_categories, three_locations, nine_ingredients):
@@ -120,6 +125,7 @@ def three_recipes(app, three_categories, three_locations, nine_ingredients):
     
     return recipe_list
 
+
 @pytest.fixture
 def one_mold(app):
     test_mold = Mold(
@@ -131,6 +137,7 @@ def one_mold(app):
     db.session.add(test_mold)
     db.session.commit()
     return test_mold
+
 
 @pytest.fixture
 def three_molds(app):

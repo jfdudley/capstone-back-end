@@ -1,6 +1,7 @@
 import pytest
 from app.models.mold import Mold
 
+
 def test_get_all_molds_no_molds_returns_empty_list(client):
     #Act
     response = client.get("/molds")

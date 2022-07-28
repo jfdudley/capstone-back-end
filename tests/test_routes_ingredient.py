@@ -1,6 +1,7 @@
 import pytest
 from app.models.ingredient import Ingredient
 
+
 def test_get_all_ingredients_no_info_returns_empty_list(client):
     #Act
     response = client.get("/ingredients")

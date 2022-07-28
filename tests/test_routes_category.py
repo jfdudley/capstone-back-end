@@ -1,6 +1,7 @@
 import pytest
 from app.models.category import Category
 
+
 def test_get_all_categories_no_info_returns_empty_list(client):
     #Act
     response = client.get("/categories")

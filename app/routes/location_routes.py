@@ -3,6 +3,7 @@ from app.helper_functions import *
 from app.models.location import Location
 from app import db
 
+
 location_bp = Blueprint("location_bp", __name__, url_prefix="/locations")
 
 # no POST route as new locations can only be created with the creation of a recipe

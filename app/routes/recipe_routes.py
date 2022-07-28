@@ -7,6 +7,7 @@ from app.models.ingredient import Ingredient
 from app.models.recipe_ingredients import RecipeIngredients
 from app import db
 
+
 recipe_bp = Blueprint("recipe_bp", __name__, url_prefix="/recipes")
 
 # get all recipes
@@ -43,6 +44,7 @@ def set_recipe_ingredients(recipe_record, ingredient_info):
         else:
             setattr(relation_instance, "percentage", percentage)
 
+
 # create new recipe, creating any new categories, locations, and ingredients along the way
 @recipe_bp.route("", methods=["POST"])
 def create_new_recipe():
@@ -62,6 +64,7 @@ def create_new_recipe():
     db.session.commit()
 
     return success_message_info(new_recipe.self_to_dict(), status_code=201)
+
 
 # Update existing recipe by id
 @recipe_bp.route("/<recipe_id>", methods=["PATCH"])

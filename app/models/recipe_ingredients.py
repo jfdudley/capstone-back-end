@@ -10,6 +10,8 @@ class RecipeIngredients(db.Model):
     recipe = db.relationship("Recipe", back_populates="ingredients")
 
 
+    # Instance Methods 
+
     def self_to_dict(self, perspective):
         if perspective == 'recipe':
             instance_dict = dict(
@@ -31,3 +33,5 @@ class RecipeIngredients(db.Model):
     @classmethod
     def return_class_name(cls):
         return cls.__name__
+
+    # No create_from_dict class method because creating a new recipe record requires instances of other models

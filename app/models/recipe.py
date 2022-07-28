@@ -11,6 +11,7 @@ class Recipe(db.Model):
     location = db.relationship("Location", back_populates='recipes')
     ingredients = db.relationship("RecipeIngredients", back_populates="recipe")
 
+
     # Instance Methods
 
     def self_to_dict(self):

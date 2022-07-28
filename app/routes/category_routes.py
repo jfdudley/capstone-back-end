@@ -3,6 +3,7 @@ from app.helper_functions import *
 from app.models.category import Category
 from app import db
 
+
 category_bp = Blueprint("category_bp", __name__, url_prefix="/categories")
 
 # no POST route as new categories can only be created with the creation of a recipe

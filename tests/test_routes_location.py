@@ -1,6 +1,7 @@
 import pytest
 from app.models.location import Location
 
+
 def test_get_all_locations_no_info_returns_empty_list(client):
     #Act
     response = client.get("/locations")

@@ -7,6 +7,7 @@ class Mold(db.Model):
     num_wells = db.Column(db.Integer, nullable=False)
     source = db.Column(db.String, nullable=False)
 
+
     # Instance Methods
 
     def self_to_dict(self):

@@ -11,16 +11,6 @@ def error_message(message, status_code):
 def success_message_info(message, status_code=200):
     return make_response(jsonify(message), status_code)
 
-# # might not need this?
-# def return_database_info_array(return_value):
-#     return make_response(jsonify(return_value))
-
-# # might not need this either? I think this was specifically written to pass task list tests
-# def return_database_info_dict(category, return_value):
-#     return_dict = {}
-#     return_dict[category] = return_value
-#     return make_response(jsonify(return_dict))
-
 def get_record_by_id(cls, id):
     try:
         id = int(id)

@@ -5,6 +5,7 @@ class Location(db.Model):
     location_name = db.Column(db.String, nullable=False)
     recipes = db.relationship("Recipe", back_populates="location")
 
+
     # Instance Methods
 
     def self_to_dict(self, show_recipes=False):

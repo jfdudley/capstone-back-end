@@ -5,6 +5,7 @@ class Ingredient(db.Model):
     ingredient_name = db.Column(db.String, nullable=False)
     recipes = db.relationship("RecipeIngredients", back_populates="ingredient")
 
+
     # Instance Methods
 
     def self_to_dict(self, show_recipes=False):

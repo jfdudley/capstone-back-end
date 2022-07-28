@@ -3,7 +3,7 @@ from app.helper_functions import *
 from app.models.mold import Mold
 from app import db
 
-# example_bp = Blueprint('example_bp', __name__)
+
 mold_bp = Blueprint("mold_bp", __name__, url_prefix="/molds")
 
 @mold_bp.route("", methods=["GET"])
@@ -20,6 +20,7 @@ def get_one_mold_by_id(mold_id):
     return success_message_info(mold.self_to_dict(), status_code=200)
 
 
+# create new mold
 @mold_bp.route("", methods=["POST"])
 def create_new_mold():
     request_body = request.get_json()
@@ -32,7 +33,7 @@ def create_new_mold():
     return success_message_info(new_mold.self_to_dict(), status_code=201)
 
 
-# update mold info (change name) by id
+# update mold info by id
 @mold_bp.route("/<mold_id>", methods=["PATCH"])
 def update_mold_by_id(mold_id):
     mold = get_record_by_id(Mold, mold_id)
