@@ -25,3 +25,9 @@ class RecipeIngredients(db.Model):
             )
 
         return instance_dict
+    
+    # Class Methods
+
+    @classmethod
+    def return_class_name(cls):
+        return cls.__name__

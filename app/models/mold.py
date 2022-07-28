@@ -48,7 +48,7 @@ class Mold(db.Model):
         if data_dict.keys() == cls.required_attributes.keys():
                 return cls(
                     well_shape=data_dict["well_shape"],
-                    well_volume=data_dict["well_volume"],
+                    well_volume_grams=data_dict["well_volume_grams"],
                     num_wells=data_dict["num_wells"],
                     source=data_dict["source"]
                 )

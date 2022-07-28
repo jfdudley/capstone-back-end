@@ -171,16 +171,16 @@ def test_get_one_recipe_invalid_id_returns_error(client, three_recipes):
 def test_add_new_recipe_existing_data_only_success(client, one_recipe):
     # Arrange
     new_recipe = {
-            "name" : "New Solid Lotion",
-            "description" : "Another lotion recipe",
+            "recipe_name" : "New Solid Lotion",
+            "recipe_description" : "Another lotion recipe",
             "category" : "Moisturizer",
             "location" : "Body",
-            "ingredients": {
+            "ingredient_info": {
                 "Beeswax" : 33,
                 "Shea Butter" : 33,
                 "Almond Oil" : 33,
             },
-            "instructions" : "1. Instructions go here\n2. Some more down here"
+            "recipe_instructions" : "1. Instructions go here\n2. Some more down here"
     }
 
     # Act
@@ -214,16 +214,16 @@ def test_add_new_recipe_existing_data_only_success(client, one_recipe):
 def test_add_new_recipe_existing_data_only_success(client, one_recipe):
     # Arrange
     new_recipe = {
-            "name" : "New Solid Lotion",
-            "description" : "Another lotion recipe",
+            "recipe_name" : "New Solid Lotion",
+            "recipe_description" : "Another lotion recipe",
             "category" : "New Category",
             "location" : "New Location",
-            "ingredients": {
+            "ingredient_info": {
                 "New wax" : 33,
                 "New Butter" : 33,
                 "New Oil" : 33,
             },
-            "instructions" : "1. Instructions go here\n2. Some more down here"
+            "recipe_instructions" : "1. Instructions go here\n2. Some more down here"
     }
 
     # Act

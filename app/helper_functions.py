@@ -66,8 +66,8 @@ def update_record_safely(cls, record, data_dict):
 def update_self(instance, data_dict):
         dict_key_errors = []
         for key in data_dict.keys():
-            if instance.hasattr(key):
-                instance.setattr(key, data_dict[key])
+            if hasattr(instance, key):
+                setattr(instance, key, data_dict[key])
             else:
                 dict_key_errors.append(key)
         if dict_key_errors:

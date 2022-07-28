@@ -32,16 +32,6 @@ class Recipe(db.Model):
 
         return instance_dict
 
-        
-    def update_self(self, data_dict):
-        dict_key_errors = []
-        for key in data_dict.keys():
-            if hasattr(self, key):
-                setattr(self, key, data_dict[key])
-            else:
-                dict_key_errors.append(key)
-        if dict_key_errors:
-            raise ValueError(dict_key_errors)
     
     # Class Methods
 
