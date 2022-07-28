@@ -51,6 +51,16 @@ def test_get_one_location_returns_correct_info_with_recipes(client, three_recipe
         }
 
 
+def test_get_one_location_returns_error_with_invalid_info(client, three_locations):
+    #Act
+    response = client.get("/locations/42")
+    response_body = response.get_json()
+
+    # Assert
+    assert response.status_code == 404
+    assert response_body == {"details" : "Location id: 42 not found."}
+
+
 def test_patch_one_location_changes_only_that_location_success(client, three_recipes):
     # Arrange
     location_response = client.get("/locations/2")

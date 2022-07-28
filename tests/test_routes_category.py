@@ -51,6 +51,16 @@ def test_get_one_category_returns_correct_info_with_recipes(client, three_recipe
         }
 
 
+def test_get_one_category_returns_error_with_invalid_info(client, three_categories):
+    #Act
+    response = client.get("/categories/42")
+    response_body = response.get_json()
+
+    # Assert
+    assert response.status_code == 404
+    assert response_body == {"details" : "Category id: 42 not found."}
+
+
 def test_patch_one_category_changes_only_that_category_success(client, three_recipes):
     # Arrange
     category_response = client.get("/categories/2")

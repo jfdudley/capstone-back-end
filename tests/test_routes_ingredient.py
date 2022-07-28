@@ -65,6 +65,15 @@ def test_get_one_ingredient_returns_correct_info_with_recipes(client, three_reci
             "percentage" : 33}]
         }
 
+def test_get_one_ingredient_returns_error_with_invalid_info(client, nine_ingredients):
+    #Act
+    response = client.get("/ingredients/42")
+    response_body = response.get_json()
+
+    # Assert
+    assert response.status_code == 404
+    assert response_body == {"details" : "Ingredient id: 42 not found."}
+
 
 def test_patch_one_ingredient_changes_only_that_ingredient_success(client, three_recipes):
     # Arrange
