@@ -1,6 +1,5 @@
 import pytest
 from app.models.category import Category
-from app.models.recipe import Recipe
 
 def test_get_all_categories_no_recipe_returns_empty_list(client):
     #Act
