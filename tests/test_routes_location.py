@@ -12,7 +12,7 @@ def test_get_all_locations_no_info_returns_empty_list(client):
     assert response_body == []
 
 
-def test_get_all_locations_returns_all_locations(client, three_locations):
+def test_get_all_locations_with_info_returns_complete_list(client, three_locations):
     #Act
     response = client.get("/locations")
     response_body = response.get_json()
@@ -52,7 +52,7 @@ def test_get_one_location_returns_correct_info_with_recipes(client, three_recipe
         }
 
 
-def test_get_one_location_returns_error_with_invalid_info(client, three_locations):
+def test_get_one_location_returns_error_with_invalid_id_num(client, three_locations):
     #Act
     response = client.get("/locations/42")
     response_body = response.get_json()
@@ -60,6 +60,16 @@ def test_get_one_location_returns_error_with_invalid_info(client, three_location
     # Assert
     assert response.status_code == 404
     assert response_body == {"details" : "Location id: 42 not found."}
+
+
+def test_get_one_location_returns_error_with_invalid_id_non_num(client, three_locations):
+    #Act
+    response = client.get("/locations/cat")
+    response_body = response.get_json()
+
+    # Assert
+    assert response.status_code == 400
+    assert response_body == {"details" : "Invalid id: cat"}
 
 
 def test_patch_one_location_changes_only_that_location_success(client, three_recipes):
@@ -186,7 +196,7 @@ def test_delete_location_with_recipes_returns_error(client, three_recipes):
     # Assert
     assert delete_response.status_code == 405
     assert delete_response_body == {"details" : "Location record is in use and so cannot be deleted."}
-    assert recipe_before["location"] == location_info_before["location_name"]
-    assert recipe_after["location"] == location_info_after["location_name"]
+    assert recipe_before["location"] == recipe_after["location"]
+    assert location_info_before["location_name"] == location_info_after["location_name"]
     assert Location.query.get(2) is not None
     

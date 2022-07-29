@@ -12,7 +12,7 @@ def test_get_all_ingredients_no_info_returns_empty_list(client):
     assert response_body == []
 
 
-def test_get_all_ingredients_returns_list(client, nine_ingredients):
+def test_get_all_ingredients_with_info_returns_complete_list(client, nine_ingredients):
     #Act
     response = client.get("/ingredients")
     response_body = response.get_json()
@@ -67,7 +67,7 @@ def test_get_one_ingredient_returns_correct_info_with_recipes(client, three_reci
         }
 
 
-def test_get_one_ingredient_returns_error_with_invalid_info(client, nine_ingredients):
+def test_get_one_ingredient_returns_error_with_invalid_id_num(client, nine_ingredients):
     #Act
     response = client.get("/ingredients/42")
     response_body = response.get_json()
@@ -75,6 +75,16 @@ def test_get_one_ingredient_returns_error_with_invalid_info(client, nine_ingredi
     # Assert
     assert response.status_code == 404
     assert response_body == {"details" : "Ingredient id: 42 not found."}
+
+
+def test_get_one_ingredient_returns_error_with_invalid_id_non_num(client, nine_ingredients):
+    #Act
+    response = client.get("/ingredients/cat")
+    response_body = response.get_json()
+
+    # Assert
+    assert response.status_code == 400
+    assert response_body == {"details" : "Invalid id: cat"}
 
 
 def test_patch_one_ingredient_changes_only_that_ingredient_success(client, three_recipes):
@@ -205,7 +215,7 @@ def test_delete_ingredient_with_recipes_returns_error(client, three_recipes):
     # Assert
     assert delete_response.status_code == 405
     assert delete_response_body == {"details" : "Ingredient record is in use and so cannot be deleted."}
-    assert recipe_before["ingredient_info"][1]["ingredient_name"] == ingredient_info_before["ingredient_name"]
-    assert recipe_after["ingredient_info"][1]["ingredient_name"] == ingredient_info_after["ingredient_name"]
+    assert recipe_before["ingredient_info"][1]["ingredient_name"] == recipe_after["ingredient_info"][1]["ingredient_name"] 
+    assert ingredient_info_before["ingredient_name"] == ingredient_info_after["ingredient_name"]
     assert Ingredient.query.get(2) is not None
     

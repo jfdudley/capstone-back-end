@@ -12,7 +12,7 @@ def test_get_all_categories_no_info_returns_empty_list(client):
     assert response_body == []
 
 
-def test_get_all_categories_returns_list(client, three_categories):
+def test_get_all_categories_with_info_returns_complete_list(client, three_categories):
     #Act
     response = client.get("/categories")
     response_body = response.get_json()
@@ -52,7 +52,7 @@ def test_get_one_category_returns_correct_info_with_recipes(client, three_recipe
         }
 
 
-def test_get_one_category_returns_error_with_invalid_info(client, three_categories):
+def test_get_one_category_returns_error_with_invalid_id_num(client, three_categories):
     #Act
     response = client.get("/categories/42")
     response_body = response.get_json()
@@ -62,6 +62,16 @@ def test_get_one_category_returns_error_with_invalid_info(client, three_categori
     assert response_body == {"details" : "Category id: 42 not found."}
 
 
+def test_get_one_category_returns_error_with_invalid_id_non_num(client, three_categories):
+    #Act
+    response = client.get("/categories/cat")
+    response_body = response.get_json()
+
+    # Assert
+    assert response.status_code == 400
+    assert response_body == {"details" : "Invalid id: cat"}
+
+
 def test_patch_one_category_changes_only_that_category_success(client, three_recipes):
     # Arrange
     category_response = client.get("/categories/2")
@@ -69,10 +79,10 @@ def test_patch_one_category_changes_only_that_category_success(client, three_rec
     recipe_response = client.get("/recipes/2")
     edited_recipe_before = recipe_response.get_json()
 
-    unchanged_recipe = client.get("/recipes/1")
-    unchanged_recipe_before = unchanged_recipe.get_json()
-    unchanged_category = client.get("/categories/1")
-    unchanged_category_before = unchanged_category.get_json()
+    recipe_1 = client.get("/recipes/1")
+    unchanged_recipe_before = recipe_1.get_json()
+    category_1 = client.get("/categories/1")
+    unchanged_category_before = category_1.get_json()
 
     new_category_info = { "category_name" : "New Category Name"}
 
@@ -186,7 +196,7 @@ def test_delete_category_with_recipes_returns_error(client, three_recipes):
     # Assert
     assert delete_response.status_code == 405
     assert delete_response_body == {"details" : "Category record is in use and so cannot be deleted."}
-    assert recipe_before["category"] == category_info_before["category_name"]
-    assert recipe_after["category"] == category_info_after["category_name"]
+    assert recipe_before["category"] == recipe_after["category"]
+    assert category_info_before["category_name"] == category_info_after["category_name"]
     assert Category.query.get(2) is not None
     

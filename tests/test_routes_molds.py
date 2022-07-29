@@ -2,7 +2,7 @@ import pytest
 from app.models.mold import Mold
 
 
-def test_get_all_molds_no_molds_returns_empty_list(client):
+def test_get_all_molds_no_info_returns_empty_list(client):
     #Act
     response = client.get("/molds")
     response_body = response.get_json()
@@ -97,7 +97,7 @@ def test_get_one_mold_returns_correct_info(client, three_molds):
     assert response_body["source"] == "Brambleberry"
 
 
-def test_get_one_mold_returns_error_with_invalid_info(client, three_molds):
+def test_get_one_mold_returns_error_with_invalid_id_num(client, three_molds):
     #Act
     response = client.get("/molds/42")
     response_body = response.get_json()
@@ -105,6 +105,16 @@ def test_get_one_mold_returns_error_with_invalid_info(client, three_molds):
     # Assert
     assert response.status_code == 404
     assert response_body == {"details" : "Mold id: 42 not found."}
+
+
+def test_get_one_mold_returns_error_with_invalid_id_non_num(client, three_molds):
+    #Act
+    response = client.get("/molds/cat")
+    response_body = response.get_json()
+
+    # Assert
+    assert response.status_code == 400
+    assert response_body == {"details" : "Invalid id: cat"}
 
 
 def test_patch_one_mold_changes_only_that_mold_success(client, three_molds):

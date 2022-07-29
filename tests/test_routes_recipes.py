@@ -12,7 +12,7 @@ def test_get_all_recipes_no_info_returns_empty_list(client):
     assert response_body == []
 
 
-def test_get_all_recipes_with_one_recipe(client, one_recipe):
+def test_get_all_recipes_with_one_recipe_success(client, one_recipe):
     #Act
     response = client.get("/recipes")
     response_body = response.get_json()
@@ -41,7 +41,7 @@ def test_get_all_recipes_with_one_recipe(client, one_recipe):
             }]
 
 
-def test_get_all_recipes_with_three_recipe(client, three_recipes):
+def test_get_all_recipes_with_three_recipes_success(client, three_recipes):
     #Act
     response = client.get("/recipes")
     response_body = response.get_json()
@@ -161,7 +161,7 @@ def test_get_one_recipe_by_id_returns_correct_recipe(client, three_recipes):
             }]
 
 
-def test_get_one_recipe_invalid_id_returns_error(client, three_recipes):
+def test_get_one_recipe_returns_error_with_invalid_id_num(client, three_recipes):
     #Act
     response = client.get("/recipes/42")
     response_body = response.get_json()
@@ -169,7 +169,17 @@ def test_get_one_recipe_invalid_id_returns_error(client, three_recipes):
     # Assert
     assert response.status_code == 404
     assert response_body == {"details" : "Recipe id: 42 not found."}
-    
+
+
+def test_get_one_recipe_returns_error_with_invalid_id_non_num(client, three_recipes):
+    #Act
+    response = client.get("/recipes/cat")
+    response_body = response.get_json()
+
+    # Assert
+    assert response.status_code == 400
+    assert response_body == {"details" : "Invalid id: cat"}
+
 
 def test_add_new_recipe_existing_data_only_success(client, one_recipe):
     # Arrange
