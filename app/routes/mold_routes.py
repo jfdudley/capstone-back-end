@@ -6,6 +6,8 @@ from app import db
 
 mold_bp = Blueprint("mold_bp", __name__, url_prefix="/molds")
 
+
+# get all molds
 @mold_bp.route("", methods=["GET"])
 def get_all_molds():
     molds = Mold.query.all()

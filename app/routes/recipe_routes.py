@@ -10,6 +10,7 @@ from app import db
 
 recipe_bp = Blueprint("recipe_bp", __name__, url_prefix="/recipes")
 
+
 # get all recipes
 @recipe_bp.route("", methods=["GET"])
 def get_all_recipes():

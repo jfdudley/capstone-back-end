@@ -6,7 +6,7 @@ from app import db
 
 location_bp = Blueprint("location_bp", __name__, url_prefix="/locations")
 
-# no POST route as new locations can only be created with the creation of a recipe
+# no POST route as new locations can only be created with the creation or patch of a recipe
 
 # get all locations
 @location_bp.route("", methods=["GET"])

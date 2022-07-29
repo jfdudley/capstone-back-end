@@ -6,7 +6,7 @@ from app import db
 
 ingredient_bp = Blueprint("ingredient_bp", __name__, url_prefix="/ingredients")
 
-# no POST route as new ingredients can only be created with the creation of a recipe
+# no POST route as new ingredients can only be created with the creation or patch of a recipe
 
 # get all ingredients
 @ingredient_bp.route("", methods=["GET"])
