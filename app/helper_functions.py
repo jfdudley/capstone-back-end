@@ -8,8 +8,10 @@ from app import db
 def error_message(message, status_code):
     abort(make_response(jsonify(dict(details=message)), status_code))
 
+
 def success_message_info(message, status_code=200):
     return make_response(jsonify(message), status_code)
+
 
 def get_record_by_id(cls, id):
     try:
@@ -21,6 +23,7 @@ def get_record_by_id(cls, id):
         return record
     else:
         error_message(f"{cls.return_class_name()} id: {id} not found.", 404)
+
 
 def get_record_by_name(cls, name):
     if cls.return_class_name() == "Recipe":
@@ -37,17 +40,13 @@ def get_record_by_name(cls, name):
         record = None
     return record
 
-def create_record_safely(cls, data_dict):
-    return cls.create_from_dict(data_dict)
 
 def update_record_safely(cls, record, data_dict):
     try:
         update_self(record, data_dict)
     except ValueError as err:
         error_message(f"Invalid key(s): {err}. {cls.return_class_name()} not updated.", 400)
-    # updating record is maintaining error handling where create record is not
-    # because create record will be handled by forms on the front end and so data_dict keys will always be correct
-    # updating a record may remain accessible via postman only and so should protect against human error
+
 
 def update_self(instance, data_dict):
         dict_key_errors = []
@@ -59,10 +58,11 @@ def update_self(instance, data_dict):
         if dict_key_errors:
             raise ValueError(dict_key_errors)
 
+
 def get_or_create_record_by_name(cls, new_value, cls_attribute):
     instance = get_record_by_name(cls, new_value)
     if not instance:
-        instance = create_record_safely(cls, {cls_attribute : new_value})
+        instance = cls.create_from_dict({cls_attribute : new_value})
         db.session.add(instance)
         db.session.commit()
     return instance

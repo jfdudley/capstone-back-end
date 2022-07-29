@@ -25,7 +25,7 @@ def get_one_mold_by_id(mold_id):
 def create_new_mold():
     request_body = request.get_json()
 
-    new_mold = create_record_safely(Mold, request_body)
+    new_mold = Mold.create_from_dict(request_body)
 
     db.session.add(new_mold)
     db.session.commit()
