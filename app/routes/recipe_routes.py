@@ -39,7 +39,8 @@ def set_recipe_ingredients(recipe_record, ingredient_info):
         if amount == 0:
             db.session.delete(relation_instance)
 
-        percentage = round((amount / total_amount) * 100)
+        percentage = round(((amount / total_amount) * 100), 2)
+
         if not relation_instance:
             db.session.add(RecipeIngredients(recipe_id=recipe_record.recipe_id, ingredient_id=ingredient_instance.ingredient_id, percentage=percentage))
         else:

@@ -5,7 +5,7 @@ class RecipeIngredients(db.Model):
     __tablename__ = "recipe_ingredients"
     recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.recipe_id'), primary_key=True,nullable=False)
     ingredient_id = db.Column(db.Integer, db.ForeignKey('ingredient.ingredient_id'), primary_key=True,nullable=False)
-    percentage = db.Column(db.Integer, nullable=False)
+    percentage = db.Column(db.Float, nullable=False)
     ingredient = db.relationship("Ingredient", back_populates="recipes")
     recipe = db.relationship("Recipe", back_populates="ingredients")
 
