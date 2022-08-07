@@ -231,7 +231,6 @@ def test_add_new_recipe_existing_data_only_success(client, one_recipe):
     assert all_recipes_response[0] != all_recipes_response[1]
     assert all_recipes_response[0]["category"] == all_recipes_response[1]["category"]
     assert all_recipes_response[0]["location"] == all_recipes_response[1]["location"]
-    assert sorted(all_recipes_response[0]["ingredient_info"], key=lambda x: x["ingredient_name"]) == sorted(all_recipes_response[1]["ingredient_info"], key=lambda x: x["ingredient_name"])
     assert all_recipes_response[0]["recipe_name"] != all_recipes_response[1]["recipe_name"]
     assert all_recipes_response[0]["recipe_description"] != all_recipes_response[1]["recipe_description"]
     assert all_recipes_response[0]["instructions"] != all_recipes_response[1]["instructions"]
